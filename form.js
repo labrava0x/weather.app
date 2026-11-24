@@ -7,14 +7,21 @@ locationForm.addEventListener("submit", async (event) => {
   const location = locationInput.value.trim();
   if (!location) return;
 
-  statusMessage.textContent = "Loading weather...";
+  const statusEl = document.getElementById("status-message");
+  const displayEl = document.getElementById("weather-display");
+
+  if (statusEl) statusEl.textContent = "Loading weather...";
 
   try {
     const weather = await getFormattedWeather(location, "metric");
-    renderWeather(weather);
+    if (typeof window.renderWeather === "function") {
+      await window.renderWeather(weather);
+    }
   } catch (error) {
     console.error("Failed to fetch weather:", error);
-    weatherDisplay.hidden = true;
-    statusMessage.textContent = "Could not load weather for that location. Try again.";
+    if (displayEl) displayEl.hidden = true;
+    if (statusEl) {
+      statusEl.textContent = "Could not load weather for that location. Try again.";
+    }
   }
 });

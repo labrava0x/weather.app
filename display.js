@@ -1,11 +1,11 @@
 let currentWeather = null;
 let unit = "C"; // "C" for Celsius, "F" for Fahrenheit
+let renderSequence = 0;
 
 const unitToggle = document.getElementById("unit-toggle");
 const statusMessage = document.getElementById("status-message");
 const weatherDisplay = document.getElementById("weather-display");
 
-// Converts a Celsius temperature number into "18°C" or "64°F"
 function toDisplayTemp(tempInCelsius) {
   if (tempInCelsius === null || tempInCelsius === undefined) return "--";
 
@@ -13,8 +13,20 @@ function toDisplayTemp(tempInCelsius) {
   return `${Math.round(value)}°${unit}`;
 }
 
-// Updates all DOM elements using the active `unit`
-function renderWeather(data) {
+async function loadWeatherIcon(iconName) {
+  if (!iconName) return null;
+
+  try {
+    const iconModule = await import(`./icons/${iconName}.svg`);
+    return iconModule.default ?? iconModule;
+  } catch (error) {
+    console.warn(`Icon not found for "${iconName}":`, error);
+    return null;
+  }
+}
+
+async function renderWeather(data) {
+  const token = ++renderSequence;
   currentWeather = data;
 
   document.getElementById("weather-location").textContent = data.location;
@@ -32,10 +44,28 @@ function renderWeather(data) {
   document.getElementById("weather-high-low").textContent =
     `High: ${toDisplayTemp(data.high)} / Low: ${toDisplayTemp(data.low)}`;
 
+  const mainIconEl = document.getElementById("weather-icon");
+  const mainIconSrc = await loadWeatherIcon(data.icon);
+  if (token !== renderSequence) return;
+
+  if (mainIconSrc) {
+    mainIconEl.src = mainIconSrc;
+    mainIconEl.alt = data.condition || data.icon;
+    mainIconEl.hidden = false;
+  } else {
+    mainIconEl.removeAttribute("src");
+    mainIconEl.hidden = true;
+  }
+
   const forecastContainer = document.getElementById("forecast-container");
   forecastContainer.replaceChildren();
 
-  data.forecast.forEach((day) => {
+  const dayIcons = await Promise.all(
+    (data.forecast ?? []).map((day) => loadWeatherIcon(day.icon))
+  );
+  if (token !== renderSequence) return;
+
+  (data.forecast ?? []).forEach((day, index) => {
     const dayCard = document.createElement("div");
     dayCard.className = "forecast-day";
 
@@ -48,7 +78,17 @@ function renderWeather(data) {
     const tempsEl = document.createElement("p");
     tempsEl.textContent = `${toDisplayTemp(day.tempMax)} / ${toDisplayTemp(day.tempMin)}`;
 
-    dayCard.append(dateEl, condEl, tempsEl);
+    const children = [dateEl];
+    if (dayIcons[index]) {
+      const dayIconEl = document.createElement("img");
+      dayIconEl.className = "forecast-icon";
+      dayIconEl.src = dayIcons[index];
+      dayIconEl.alt = day.conditions || day.icon || "Forecast weather";
+      children.push(dayIconEl);
+    }
+    children.push(condEl, tempsEl);
+
+    dayCard.append(...children);
     forecastContainer.appendChild(dayCard);
   });
 
@@ -56,7 +96,8 @@ function renderWeather(data) {
   statusMessage.textContent = "";
 }
 
-// Flips between "C" and "F" and re-renders saved data without re-fetching
+window.renderWeather = renderWeather;
+
 unitToggle.addEventListener("click", () => {
   unit = unit === "C" ? "F" : "C";
   unitToggle.textContent = unit === "C" ? "Switch to °F" : "Switch to °C";
