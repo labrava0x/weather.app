@@ -18,7 +18,7 @@
         type="text"
         id="location-input"
         name="location"
-        placeholder="e.g., Torrevieja"
+        placeholder="e.g., Reykjavik"
         required
       />
       <button type="submit">Get Weather</button>
@@ -27,6 +27,11 @@
     <button type="button" id="unit-toggle" aria-pressed="false">
       Switch to °F
     </button>
+
+    <section id="loading-panel" aria-live="polite" hidden>
+      <span class="loading-bar" aria-hidden="true"></span>
+      <p id="loading-text">DETONATING REQUEST...</p>
+    </section>
 
     <p id="status-message" role="status"></p>
 
