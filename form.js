@@ -7,10 +7,14 @@ locationForm.addEventListener("submit", async (event) => {
   const location = locationInput.value.trim();
   if (!location) return;
 
+  statusMessage.textContent = "Loading weather...";
+
   try {
-    const weather = await getFormattedWeather(location);
-    console.log("Weather result:", weather);
+    const weather = await getFormattedWeather(location, "metric");
+    renderWeather(weather);
   } catch (error) {
     console.error("Failed to fetch weather:", error);
+    weatherDisplay.hidden = true;
+    statusMessage.textContent = "Could not load weather for that location. Try again.";
   }
 });

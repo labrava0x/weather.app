@@ -8,18 +8,38 @@
   <script src="./scripts.js" defer></script>
   <script src="./weather.data.js" defer></script>
   <script src="./form.js" defer></script>
+  <script src="./display.js" defer></script>
 </head>
 <body>
-  <form id="location-form">
-    <label for="location-input">Location</label>
-    <input
-      type="text"
-      id="location-input"
-      name="location"
-      placeholder="e.g., Torrevieja"
-      required
-    />
-    <button type="submit">Get Weather</button>
-  </form>
+  <main id="app">
+    <form id="location-form">
+      <label for="location-input">Location</label>
+      <input
+        type="text"
+        id="location-input"
+        name="location"
+        placeholder="e.g., Torrevieja"
+        required
+      />
+      <button type="submit">Get Weather</button>
+    </form>
+
+    <button type="button" id="unit-toggle" aria-pressed="false">
+      Switch to °F
+    </button>
+
+    <p id="status-message" role="status"></p>
+
+    <section id="weather-display" hidden>
+      <h2 id="weather-location"></h2>
+      <p id="weather-condition"></p>
+      <p id="weather-temp"></p>
+      <p id="weather-feels-like"></p>
+      <p id="weather-humidity"></p>
+      <p id="weather-wind"></p>
+      <p id="weather-high-low"></p>
+      <div id="forecast-container"></div>
+    </section>
+  </main>
 </body>
 </html>
