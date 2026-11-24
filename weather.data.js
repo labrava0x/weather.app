@@ -24,5 +24,7 @@ function processWeatherData(rawData) {
 
 async function getFormattedWeather(location, unitGroup = "metric") {
   const rawData = await getWeatherData(location, unitGroup);
-  return processWeatherData(rawData);
+  const formattedData = processWeatherData(rawData);
+  console.log("Processed weather object:", formattedData);
+  return formattedData;
 }
