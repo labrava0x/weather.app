@@ -5,12 +5,15 @@ const unitToggle = document.getElementById("unit-toggle");
 const statusMessage = document.getElementById("status-message");
 const weatherDisplay = document.getElementById("weather-display");
 
+// Converts a Celsius temperature number into "18°C" or "64°F"
 function toDisplayTemp(tempInCelsius) {
   if (tempInCelsius === null || tempInCelsius === undefined) return "--";
+
   const value = unit === "C" ? tempInCelsius : (tempInCelsius * 9) / 5 + 32;
   return `${Math.round(value)}°${unit}`;
 }
 
+// Updates all DOM elements using the active `unit`
 function renderWeather(data) {
   currentWeather = data;
 
@@ -53,6 +56,7 @@ function renderWeather(data) {
   statusMessage.textContent = "";
 }
 
+// Flips between "C" and "F" and re-renders saved data without re-fetching
 unitToggle.addEventListener("click", () => {
   unit = unit === "C" ? "F" : "C";
   unitToggle.textContent = unit === "C" ? "Switch to °F" : "Switch to °C";
