@@ -1,30 +1,29 @@
-const BASE_URL =
-  "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline";
+import "../styles.css";
+import "./form.js";
 
-async function getWeatherData(location, unitGroup = "metric") {
-  const encodedLocation = encodeURIComponent(location.trim());
-  const url = `${BASE_URL}/${encodedLocation}?unitGroup=${unitGroup}&contentType=json`;
+export { renderWeather } from "./display.js";
 
-  try {
-    const response = await fetch(url);
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-
-    const data = await response.json();
-    console.log(data);
-    return data;
-  } catch (error) {
-    console.error("Failed to fetch weather data:", error);
-    throw error;
-  }
+export function formatTemp(tempC, useFahrenheit = false) {
+  if (typeof tempC !== "number" || Number.isNaN(tempC)) return "--";
+  const value = useFahrenheit ? (tempC * 9) / 5 + 32 : tempC;
+  const unit = useFahrenheit ? "°F" : "°C";
+  return `${Math.round(value * 10) / 10}${unit}`;
 }
 
-async function logWeatherForLocation(location, unitGroup = "metric") {
-  try {
-    await getWeatherData(location, unitGroup);
-  } catch {
-    // Error is already logged inside getWeatherData
+export function formatWind(windKph, useFahrenheit = false) {
+  if (typeof windKph !== "number" || Number.isNaN(windKph)) return "--";
+  if (useFahrenheit) {
+    const mph = Math.round(windKph * 0.621371 * 10) / 10;
+    return `${mph} mph`;
   }
+  return `${Math.round(windKph * 10) / 10} km/h`;
 }
+
+export function formatHumidity(humidity) {
+  if (typeof humidity !== "number" || Number.isNaN(humidity)) return "HUMIDITY: --";
+  return `HUMIDITY: ${Math.round(humidity)}%`;
+}
+
+window.addEventListener("unhandledrejection", (event) => {
+  console.error("Unhandled async error:", event.reason);
+});

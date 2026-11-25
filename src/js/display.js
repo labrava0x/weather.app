@@ -1,3 +1,6 @@
+import { getWeatherIconUrl } from "../icons/icons.js";
+import { formatTemp, formatWind, formatHumidity } from "./script.js";
+
 const unitToggleBtn = document.getElementById("unit-toggle");
 const displaySection = document.getElementById("weather-display");
 const statusEl = document.getElementById("status-message");
@@ -16,85 +19,65 @@ let currentWeather = null;
 let useFahrenheit = false;
 let renderSequence = 0;
 
-function formatTemp(tempC) {
-  if (typeof tempC !== "number" || Number.isNaN(tempC)) return "--";
-  const value = useFahrenheit ? (tempC * 9) / 5 + 32 : tempC;
-  const unit = useFahrenheit ? "°F" : "°C";
-  return `${Math.round(value * 10) / 10}${unit}`;
-}
-
-function formatWind(windKph) {
-  if (typeof windKph !== "number" || Number.isNaN(windKph)) return "--";
-  if (useFahrenheit) {
-    const mph = Math.round((windKph * 0.621371) * 10) / 10;
-    return `${mph} mph`;
-  }
-  return `${Math.round(windKph * 10) / 10} km/h`;
-}
-
-function sanitizeIconName(iconName) {
-  if (!iconName || typeof iconName !== "string") return "";
-  return iconName.replace(/[^a-zA-Z0-9_-]/g, "");
-}
-
-async function loadWeatherIcon(iconName) {
-  const safeName = sanitizeIconName(iconName);
-  if (!safeName) return null;
-
-  try {
-    const svgModule = await import(`../icons/${safeName}.svg`);
-    return svgModule?.default ?? null;
-  } catch {
-    return null;
-  }
-}
-
 function renderForecast(forecastDays = []) {
   if (!forecastContainer) return;
-  forecastContainer.innerHTML = "";
+  forecastContainer.replaceChildren();
+
+  if (!Array.isArray(forecastDays)) return;
 
   forecastDays.forEach((day) => {
     const card = document.createElement("article");
     card.className = "forecast-day";
 
     const dateHeading = document.createElement("h3");
-    dateHeading.textContent = day.date || "--";
+    dateHeading.textContent = day?.date || "--";
+
+    const dayIconUrl = getWeatherIconUrl(day?.icon);
+    const dayIcon = document.createElement("img");
+    dayIcon.className = "forecast-icon";
+    dayIcon.width = 36;
+    dayIcon.height = 36;
+    if (dayIconUrl) {
+      dayIcon.src = dayIconUrl;
+      dayIcon.alt = day?.conditions || day?.icon || "Forecast icon";
+    }
 
     const condText = document.createElement("p");
-    condText.textContent = day.conditions || "";
+    condText.textContent = day?.conditions || "";
 
     const rangeText = document.createElement("p");
-    rangeText.textContent = `HI ${formatTemp(day.tempMax)} / LO ${formatTemp(day.tempMin)}`;
+    rangeText.textContent = `HI ${formatTemp(day?.tempMax, useFahrenheit)} / LO ${formatTemp(day?.tempMin, useFahrenheit)}`;
 
-    card.append(dateHeading, condText, rangeText);
+    if (dayIconUrl) {
+      card.append(dateHeading, dayIcon, condText, rangeText);
+    } else {
+      card.append(dateHeading, condText, rangeText);
+    }
     forecastContainer.appendChild(card);
   });
 }
 
 function paintWeather(weather) {
-  if (!weather || !displaySection) return;
+  if (!weather) return;
 
   if (locationEl) locationEl.textContent = weather.location || "UNKNOWN SECTOR";
   if (conditionEl) conditionEl.textContent = weather.condition || "--";
-  if (tempEl) tempEl.textContent = formatTemp(weather.temp);
+  if (tempEl) tempEl.textContent = formatTemp(weather.temp, useFahrenheit);
   if (feelsLikeEl) {
-    feelsLikeEl.textContent = `FEELS LIKE: ${formatTemp(weather.feelsLike)}`;
+    feelsLikeEl.textContent = `FEELS LIKE: ${formatTemp(weather.feelsLike, useFahrenheit)}`;
   }
   if (humidityEl) {
-    humidityEl.textContent =
-      typeof weather.humidity === "number"
-        ? `HUMIDITY: ${Math.round(weather.humidity)}%`
-        : "HUMIDITY: --";
+    humidityEl.textContent = formatHumidity(weather.humidity);
   }
   if (windEl) {
-    windEl.textContent = `WIND: ${formatWind(weather.windSpeed)}`;
+    windEl.textContent = `WIND: ${formatWind(weather.windSpeed, useFahrenheit)}`;
   }
   if (highLowEl) {
-    highLowEl.textContent = `MAX ${formatTemp(weather.high)} // MIN ${formatTemp(weather.low)}`;
+    highLowEl.textContent = `MAX ${formatTemp(weather.high, useFahrenheit)} // MIN ${formatTemp(weather.low, useFahrenheit)}`;
   }
 
   renderForecast(weather.forecast);
-  displaySection.hidden = false;
+  if (displaySection) displaySection.hidden = false;
   if (statusEl) statusEl.textContent = "";
 }
 
@@ -106,12 +89,14 @@ export async function renderWeather(weather) {
 
   if (!iconEl) return;
 
-  const iconUrl = await loadWeatherIcon(weather?.icon);
+  const iconUrl = getWeatherIconUrl(weather?.icon);
   if (currentRender !== renderSequence) return;
 
   if (iconUrl) {
     iconEl.src = iconUrl;
     iconEl.alt = weather.condition || weather.icon || "Weather icon";
+    iconEl.width = 56;
+    iconEl.height = 56;
     iconEl.hidden = false;
   } else {
     iconEl.removeAttribute("src");

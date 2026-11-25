@@ -261,3 +261,10 @@ button {
     padding: 1.15rem;
   }
 }
+.forecast-day h3 {
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--nitro-amber);
+  letter-spacing: 0.04em;
+}

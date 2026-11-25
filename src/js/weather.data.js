@@ -1,9 +1,8 @@
-const API_KEY = "3489Y6VW544UEJCYA93V7BEGS";
-const BASE_URL =
-  "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline";
+const PROXY_URL = "https://muddy-pine-d3f1.la-brava-codes.workers.dev";
+
 async function getWeatherData(location, unitGroup = "metric") {
   const query = encodeURIComponent(location.trim());
-  const url = `${BASE_URL}/${query}?unitGroup=${encodeURIComponent(unitGroup)}&include=current,days&key=${encodeURIComponent(API_KEY)}&contentType=json`;
+  const url = `${PROXY_URL}?location=${query}&unitGroup=${encodeURIComponent(unitGroup)}`;
 
   const response = await fetch(url);
 
