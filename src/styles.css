@@ -10,9 +10,15 @@
   --danger: #ff2a3c;
 }
 
-* {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   border-radius: 0;
+}
+
+[hidden] {
+  display: none !important;
 }
 
 body {
@@ -110,6 +116,46 @@ button {
 #unit-toggle:hover,
 #unit-toggle[aria-pressed="true"] {
   border-color: var(--nitro-amber);
+  color: var(--nitro-amber);
+}
+
+#loading-panel {
+  margin-top: 1rem;
+  padding: 0.85rem 1rem;
+  background: var(--concrete-dark);
+  border: 2px solid var(--blast-orange);
+}
+
+.loading-bar {
+  display: block;
+  height: 8px;
+  margin-bottom: 0.6rem;
+  background: repeating-linear-gradient(
+    -45deg,
+    var(--blast-orange),
+    var(--blast-orange) 10px,
+    var(--concrete-slab) 10px,
+    var(--concrete-slab) 20px
+  );
+  background-size: 28px 28px;
+  animation: hazard-shift 0.6s linear infinite;
+}
+
+@keyframes hazard-shift {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 28px 0;
+  }
+}
+
+#loading-text {
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
   color: var(--nitro-amber);
 }
 
