@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Weather App</title>
+<script defer src="bundle.js"></script></head>
+<body>
+  <main id="app">
+    <form id="location-form">
+      <label for="location-input">Location</label>
+      <input
+        type="text"
+        id="location-input"
+        name="location"
+        placeholder="e.g., Reykjavik"
+        required
+      />
+      <button type="submit">Get Weather</button>
+    </form>
+
+    <button type="button" id="unit-toggle" aria-pressed="false">
+      Switch to °F
+    </button>
+
+    <section id="loading-panel" aria-live="polite" hidden>
+      <span class="loading-bar" aria-hidden="true"></span>
+      <p id="loading-text">DETONATING REQUEST...</p>
+    </section>
+
+    <p id="status-message" role="status"></p>
+
+    <div class="observer-trigger-wrap">
+      <button
+        type="button"
+        id="observer-detonate-btn"
+        class="observer-detonate"
+        aria-label="Reveal next observer clue"
+        aria-controls="observer-whisper"
+        aria-expanded="false"
+      >
+        💥
+      </button>
+      <p id="observer-whisper" class="observer-whisper" hidden></p>
+    </div>
+
+    <section id="weather-display" hidden>
+      <h2 id="weather-location"></h2>
+      <img id="weather-icon" alt="" hidden />
+      <p id="weather-condition"></p>
+      <p id="weather-temp"></p>
+      <p id="weather-feels-like"></p>
+      <p id="weather-humidity"></p>
+      <p id="weather-wind"></p>
+      <p id="weather-high-low"></p>
+      <div id="forecast-container"></div>
+    </section>
+  </main>
+</body>
