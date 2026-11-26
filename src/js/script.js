@@ -27,3 +27,37 @@ export function formatHumidity(humidity) {
 window.addEventListener("unhandledrejection", (event) => {
   console.error("Unhandled async error:", event.reason);
 });
+function initObserverTrail() {
+  const clueBtn = document.getElementById("observer-clue-btn");
+  const whisperEl = document.getElementById("observer-whisper");
+
+  if (!clueBtn || !whisperEl) return;
+
+  const lines = [
+    "If you ever find your heart to be weathering, look for the storm that is always raging on. That is the first step to clear the skies",
+    "The rain whispers after the mist... what do you see?",
+    "Thunder I felt, but shelter I did not find, blizzard, or hurricane to always detonate"
+  ];
+
+  let index = 0;
+
+  clueBtn.addEventListener("click", () => {
+    if (index < lines.length) {
+      whisperEl.textContent = lines[index];
+      whisperEl.hidden = false;
+      clueBtn.setAttribute("aria-expanded", "true");
+      index += 1;
+    } else {
+      whisperEl.hidden = true;
+      whisperEl.textContent = "";
+      clueBtn.setAttribute("aria-expanded", "false");
+      index = 0;
+    }
+  });
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initObserverTrail);
+} else {
+  initObserverTrail();
+}

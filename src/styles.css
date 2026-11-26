@@ -268,3 +268,35 @@ button {
   color: var(--nitro-amber);
   letter-spacing: 0.04em;
 }
+.observer-trail {
+  margin-top: 2rem;
+  max-width: 48ch;
+}
+
+.observer-clue {
+  background: none;
+  border: none;
+  padding: 0;
+  color: inherit;
+  font: inherit;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  letter-spacing: 0.14em;
+  text-align: left;
+  cursor: pointer;
+  opacity: 0.35;
+  transition: opacity 0.2s ease;
+}
+
+.observer-clue:hover,
+.observer-clue:focus-visible,
+.observer-clue[aria-expanded="true"] {
+  opacity: 0.9;
+}
+
+.observer-whisper {
+  margin-top: 0.65rem;
+  font-size: 0.78rem;
+  line-height: 1.55;
+  opacity: 0.8;
+}
