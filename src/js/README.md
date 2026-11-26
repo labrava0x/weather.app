@@ -1,6 +1,9 @@
-# Weather App
+# Weather App 
+A weather app that is ready to detonate with the best weather
 
-A browser weather and multi-day forecast dashboard built with modular JavaScript, ES modules, and Webpack for TOP, my very first ever weather app with a brutalist aesthetic by what is always wiring my inspiration ech step of the way. I went for this aesthetic because it is what felt right
+## SYNOPSIS
+
+A browser weather and multi-day forecast dashboard built with modular JavaScript, ES modules, and Webpack for The Odin Project—my very first weather app, forged with an industrial brutalist aesthetic inspired by the explosive energy that kept me going every step of the way. I chose this raw, concrete-and-amber look because it felt right. Alongside the frontend, I also built a backend proxy/worker for the very first time to keep my API key hidden—an experiment that turned into quite the journey.
 
 ## Features
 
@@ -8,9 +11,10 @@ A browser weather and multi-day forecast dashboard built with modular JavaScript
 - **Unit Toggle (`°C` / `°F`):** Switch between Celsius/metric and Fahrenheit/imperial measurements and re-render active weather data without losing the current view.
 - **Current Weather Readout:** Displays location, weather condition, current temperature, "feels like" temperature, humidity percentage, wind speed, and daily high/low values.
 - **Multi-Day Forecast Cards:** Dynamically renders upcoming forecast days with dates, weather icons, condition descriptions, and high/low temperature ranges.
-- **Weather Icon Mapping:** Resolves condition/icon codes to visual assets via a dedicated icon module.
-- **Async & Status Handling:** Handles loading/status messages, surfaces errors cleanly, and logs unhandled promise rejections.
-- **Modular Architecture:** Separates entry/formatting helpers, data fetching/normalization, form handling, DOM rendering, and icon resolution.
+- **Weather Icon Mapping:** Resolves condition/icon codes to SVG visual assets via a dedicated icon module.
+- **Async & Status Handling:** Displays a custom hazard-bar loading state (`DETONATING REQUEST...`), surfaces errors cleanly, and logs unhandled promise rejections.
+- **Observer Detonator (`💥`):** An interactive hidden trigger tucked inside the slab interface—each detonation reveals the next fragment of an observer's weather-worn trail.
+- **Modular Architecture:** Separates bundle entry imports, formatting/observer helpers, data fetching/normalization, form handling, DOM rendering, and icon resolution.
 
 ## Project Structure
 
@@ -20,40 +24,12 @@ weather-app/
 │   ├── icons/
 │   │   └── icons.js          # Resolves weather condition/icon identifiers to icon URLs
 │   ├── js/
-│   │   ├── script.js         # Entry imports, compatibility re-export, formatting helpers, async error listener
+│   │   ├── index.js          # Webpack entry point importing styles and core JS modules
+│   │   ├── script.js         # Formatting helpers, async error listener, and observer detonator logic
 │   │   ├── form.js           # Search form event handling and weather data requests
 │   │   ├── display.js        # DOM rendering, forecast cards, icon updates, and unit toggle state
 │   │   └── weather.data.js   # Weather API / worker fetching and response formatting
-│   └── styles.css            # Application styles
-├── index.html
+│   ├── index.html            # HTML template bundled by HtmlWebpackPlugin
+│   └── styles.css            # Brutalist concrete-and-blast-orange stylesheet
 ├── package.json
 └── webpack.config.js
-```
-
-## Getting Started
-
-### 1. Install Dependencies
-
-```bash
-npm install
-```
-
-### 2. Run in Development Mode
-
-```bash
-npm start
-```
-
-### 3. Build for Production
-
-```bash
-npm run build
-```
-
-## Key Modules
-
-- **`src/js/script.js`:** Imports application styles and `./form.js`, re-exports `renderWeather` from `./display.js`, provides `formatTemp`, `formatWind`, and `formatHumidity`, and listens for unhandled promise rejections.
-- **`src/js/weather.data.js`:** Fetches weather data and structures current conditions and forecast days for the UI.
-- **`src/js/form.js`:** Captures search submissions, coordinates data retrieval, and updates status/display states.
-- **`src/js/display.js`:** Uses formatting helpers from `./script.js` and icon URLs from `../icons/icons.js` to render current weather, icons, forecast cards, and `°C` / `°F` toggles.
-- **`src/icons/icons.js`:** Maps weather icon keys to asset paths/URLs.

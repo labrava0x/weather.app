@@ -1,3 +1,4 @@
-import '../styles.css';
-import './form.js';
-import './display.js';
+import "../styles.css";
+import "./form.js";
+import "./display.js";
+import "./script.js";

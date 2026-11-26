@@ -30,6 +30,20 @@
 
     <p id="status-message" role="status"></p>
 
+    <div class="observer-trigger-wrap">
+      <button
+        type="button"
+        id="observer-detonate-btn"
+        class="observer-detonate"
+        aria-label="Reveal next observer clue"
+        aria-controls="observer-whisper"
+        aria-expanded="false"
+      >
+        💥
+      </button>
+      <p id="observer-whisper" class="observer-whisper" hidden></p>
+    </div>
+
     <section id="weather-display" hidden>
       <h2 id="weather-location"></h2>
       <img id="weather-icon" alt="" hidden />
@@ -41,19 +55,5 @@
       <p id="weather-high-low"></p>
       <div id="forecast-container"></div>
     </section>
-
-    <div class="observer-trail">
-      <button
-        type="button"
-        id="observer-clue-btn"
-        class="observer-clue"
-        aria-expanded="false"
-        aria-controls="observer-whisper"
-      >
-        [ ... ]
-      </button>
-      <p id="observer-whisper" class="observer-whisper" hidden></p>
-    </div>
   </main>
 </body>
-</html>
